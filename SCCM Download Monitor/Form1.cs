@@ -75,11 +75,17 @@ namespace SCCM_Download_Monitor
             // Only try to connect if Ping works
             if (PingMachine(tbHostname.Text))
             {
+                // Connect to WMI and get the OS Name
                 var initialWMIResult = await InitialWMIConnect(tbHostname.Text);
                 lbLog.Items.Add(initialWMIResult);
-                List<CTMDownloadHistory> list = await GetDownloadHistory(tbHostname.Text);
-                lbLog.Items.Add(list[0].ContentID);
-                
+
+                // Connect to WMI and get the SCCM Content Download History
+                SortableBindingList<CTMDownloadHistory> list = await GetDownloadHistory(tbHostname.Text);
+
+                // Set datagrid datasource to the list returned and sort by date descending
+                dgPreviousDownloads.DataSource = list;
+                dgPreviousDownloads.Sort(dgPreviousDownloads.Columns[5], ListSortDirection.Descending);
+
             }
         }
 
@@ -105,7 +111,7 @@ namespace SCCM_Download_Monitor
             });
         }
 
-        private async Task<List<CTMDownloadHistory>> GetDownloadHistory(string hostname)
+        private async Task<SortableBindingList<CTMDownloadHistory>> GetDownloadHistory(string hostname)
         {
             return await Task.Run(() =>
             {
@@ -119,17 +125,10 @@ namespace SCCM_Download_Monitor
                 ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
 
                 ManagementObjectCollection queryCollection = searcher.Get();
-                List<CTMDownloadHistory> list = new List<CTMDownloadHistory>();
+                SortableBindingList<CTMDownloadHistory> list = new SortableBindingList<CTMDownloadHistory>();
                 foreach (ManagementObject m in queryCollection)
                 {
-                    CTMDownloadHistory obj = new CTMDownloadHistory();
-                    obj.BytesDownloaded = (UInt64)m["BytesDownloaded"];
-                    obj.ContentID = (string)m["ContentID"];
-                    obj.CTMJobID = (string)m["CTMJobID"];
-                    obj.DownloadSource = (string)m["DownloadSource"];
-                    obj.DownloadType = (UInt32)m["DownloadType"];
-                    obj.StartTime = (string)m["StartTime"];
-
+                    CTMDownloadHistory obj = new CTMDownloadHistory(m["BytesDownloaded"], m["ContentID"], m["CTMJobID"], m["DownloadSource"], m["DownloadType"], m["StartTime"]);
                     list.Add(obj);
                 }
                 return list;
@@ -138,18 +137,23 @@ namespace SCCM_Download_Monitor
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            // Check if running as admin, and relaunch if not.
-            if (CheckIfElevated() == false)
-            {
-                string myPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            // Set some DataGridViewProperties
+            dgPreviousDownloads.AutoGenerateColumns = true;
+            dgPreviousDownloads.ReadOnly = true;
+            dgPreviousDownloads.AllowUserToAddRows = false;
 
-                // Restart program and run as admin
-                ProcessStartInfo startInfo = new ProcessStartInfo(myPath);
-                startInfo.Verb = "runas";
-                System.Diagnostics.Process.Start(startInfo);
-                Application.Exit();
-                return;
-            }
+            //// Check if running as admin, and relaunch if not.
+            //if (CheckIfElevated() == false)
+            //{
+            //    string myPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+
+            //    // Restart program and run as admin
+            //    ProcessStartInfo startInfo = new ProcessStartInfo(myPath);
+            //    startInfo.Verb = "runas";
+            //    System.Diagnostics.Process.Start(startInfo);
+            //    Application.Exit();
+            //    return;
+            //}
         }
     }
 }
