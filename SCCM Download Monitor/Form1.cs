@@ -14,12 +14,14 @@ using System.Threading.Tasks;
 using SCCM_Download_Monitor.Classes;
 using System.Security.Principal;
 using System.Diagnostics;
+using System.Security;
 
 namespace SCCM_Download_Monitor
 {
     public partial class Form1 : Form
     {
         private readonly SynchronizationContext syncContext;
+        private ConnectionOptions connOptions;
         public Form1()
         {
             InitializeComponent();
@@ -75,12 +77,26 @@ namespace SCCM_Download_Monitor
             // Only try to connect if Ping works
             if (PingMachine(tbHostname.Text))
             {
+                connOptions = new ConnectionOptions();
+                // Set up generic WMI Connection Options
+                connOptions.Impersonation = System.Management.ImpersonationLevel.Impersonate;
+                connOptions.Authentication = AuthenticationLevel.Default;
+                connOptions.EnablePrivileges = true;
+
+                //If username text box is not blank, add the credentials to the connection options
+                if (tbUsername.Text != "")
+                {
+                    connOptions.Username = tbUsername.Text;
+                    connOptions.SecurePassword = tbPassword.SecureText;                    
+                }
+
                 // Connect to WMI and get the OS Name
                 var initialWMIResult = await InitialWMIConnect(tbHostname.Text);
                 lbLog.Items.Add(initialWMIResult);
 
-                // Connect to WMI and get the SCCM Content Download History
+                // Connect to WMI and get the ContentTransferManager history
                 SortableBindingList<CTMDownloadHistory> list = await GetDownloadHistory(tbHostname.Text);
+
 
                 // Set datagrid datasource to the list returned and sort by date descending
                 dgPreviousDownloads.DataSource = list;
@@ -93,10 +109,8 @@ namespace SCCM_Download_Monitor
         {
             return await Task.Run(() =>
             {
-                ConnectionOptions options = new ConnectionOptions();
-                options.Impersonation = System.Management.ImpersonationLevel.Impersonate;
 
-                ManagementScope scope = new ManagementScope("\\\\" + hostname + "\\root\\cimv2", options);
+                ManagementScope scope = new ManagementScope("\\\\" + hostname + "\\root\\cimv2", connOptions);
                 scope.Connect();
 
                 ObjectQuery query = new ObjectQuery("select * from Win32_OperatingSystem");
@@ -115,10 +129,7 @@ namespace SCCM_Download_Monitor
         {
             return await Task.Run(() =>
             {
-                ConnectionOptions options = new ConnectionOptions();
-                options.Impersonation = System.Management.ImpersonationLevel.Impersonate;
-
-                ManagementScope scope = new ManagementScope("\\\\" + hostname + "\\root\\ccm\\ContentTransferManager", options);
+                ManagementScope scope = new ManagementScope("\\\\" + hostname + "\\root\\ccm\\ContentTransferManager", connOptions);
                 scope.Connect();
 
                 ObjectQuery query = new ObjectQuery("select * from CCM_CTM_DownloadHistory");
@@ -154,6 +165,11 @@ namespace SCCM_Download_Monitor
             //    Application.Exit();
             //    return;
             //}
+        }
+
+        private void splitContainer2_Panel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
