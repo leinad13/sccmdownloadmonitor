@@ -18,6 +18,8 @@ namespace SCCM_Download_Monitor.Classes
         public UInt32 DownloadType { get; set; }
         public DateTime StartTime { get; set; }
 
+        public string ApplicationName { get; set; }
+
         public CTMDownloadHistory(object bytesDownloaded, object contentID, object cTMJobID, object downloadSource, object downloadType, object startTime)
         {
             this.BytesDownloaded = (ulong)bytesDownloaded;
@@ -26,6 +28,7 @@ namespace SCCM_Download_Monitor.Classes
             DownloadSource = (string)downloadSource;
             DownloadType = (UInt32)downloadType;
             StartTime = ManagementDateTimeConverter.ToDateTime((string)startTime);
+            ApplicationName = "";
         }
 
         public CTMDownloadHistory() { }

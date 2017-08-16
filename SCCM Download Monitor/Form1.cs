@@ -22,6 +22,8 @@ namespace SCCM_Download_Monitor
     {
         private readonly SynchronizationContext syncContext;
         private ConnectionOptions connOptions;
+        private SCCMSiteDetails siteDetails;
+
         public Form1()
         {
             InitializeComponent();
@@ -59,13 +61,15 @@ namespace SCCM_Download_Monitor
                 {
                     lbLog.Items.Add(hostname + " is Online");
                     return true;
-                } else
+                }
+                else
                 {
 
                     return false;
                 }
 
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 lbLog.Items.Add("Problem connecting to " + hostname);
                 return false;
@@ -87,7 +91,7 @@ namespace SCCM_Download_Monitor
                 if (tbUsername.Text != "")
                 {
                     connOptions.Username = tbUsername.Text;
-                    connOptions.SecurePassword = tbPassword.SecureText;                    
+                    connOptions.SecurePassword = tbPassword.SecureText;
                 }
 
                 // Connect to WMI and get the OS Name
@@ -97,11 +101,19 @@ namespace SCCM_Download_Monitor
                 // Connect to WMI and get the ContentTransferManager history
                 SortableBindingList<CTMDownloadHistory> list = await GetDownloadHistory(tbHostname.Text);
 
+                if (list != null)
+                {
+                    // Set datagrid datasource to the list returned and sort by date descending
+                    dgPreviousDownloads.DataSource = list;
+                    dgPreviousDownloads.Sort(dgPreviousDownloads.Columns[5], ListSortDirection.Descending);
 
-                // Set datagrid datasource to the list returned and sort by date descending
-                dgPreviousDownloads.DataSource = list;
-                dgPreviousDownloads.Sort(dgPreviousDownloads.Columns[5], ListSortDirection.Descending);
-
+                    // Enable additional feature buttons
+                    btnContentToApp.Enabled = true;
+                }
+                else
+                {
+                    lbLog.Items.Add("Access Denied to " + tbHostname.Text);
+                }
             }
         }
 
@@ -129,20 +141,29 @@ namespace SCCM_Download_Monitor
         {
             return await Task.Run(() =>
             {
-                ManagementScope scope = new ManagementScope("\\\\" + hostname + "\\root\\ccm\\ContentTransferManager", connOptions);
-                scope.Connect();
-
-                ObjectQuery query = new ObjectQuery("select * from CCM_CTM_DownloadHistory");
-                ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
-
-                ManagementObjectCollection queryCollection = searcher.Get();
-                SortableBindingList<CTMDownloadHistory> list = new SortableBindingList<CTMDownloadHistory>();
-                foreach (ManagementObject m in queryCollection)
+                try
                 {
-                    CTMDownloadHistory obj = new CTMDownloadHistory(m["BytesDownloaded"], m["ContentID"], m["CTMJobID"], m["DownloadSource"], m["DownloadType"], m["StartTime"]);
-                    list.Add(obj);
+                    ManagementScope scope = new ManagementScope("\\\\" + hostname + "\\root\\ccm\\ContentTransferManager", connOptions);
+                    scope.Connect();
+
+                    ObjectQuery query = new ObjectQuery("select * from CCM_CTM_DownloadHistory");
+                    ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
+
+                    ManagementObjectCollection queryCollection = searcher.Get();
+                    SortableBindingList<CTMDownloadHistory> list = new SortableBindingList<CTMDownloadHistory>();
+                    foreach (ManagementObject m in queryCollection)
+                    {
+                        CTMDownloadHistory obj = new CTMDownloadHistory(m["BytesDownloaded"], m["ContentID"], m["CTMJobID"], m["DownloadSource"], m["DownloadType"], m["StartTime"]);
+                        list.Add(obj);
+                    }
+                    return list;
                 }
-                return list;
+                catch (System.Management.ManagementException ex)
+                {
+                    // AccessDenied usually
+                }
+                return null;
+
             });
         }
 
@@ -153,23 +174,72 @@ namespace SCCM_Download_Monitor
             dgPreviousDownloads.ReadOnly = true;
             dgPreviousDownloads.AllowUserToAddRows = false;
 
-            //// Check if running as admin, and relaunch if not.
-            //if (CheckIfElevated() == false)
-            //{
-            //    string myPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            // Check if running as admin, and relaunch if not.
+            if (CheckIfElevated() == false)
+            {
+                // Not elevated, ask user if they want to re-launch as admin
+                DialogResult dialogResult = MessageBox.Show("Some operations will require local admin rights, do you want to re-launch as Admin?", "Restart App as Admin?", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    string myPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
 
-            //    // Restart program and run as admin
-            //    ProcessStartInfo startInfo = new ProcessStartInfo(myPath);
-            //    startInfo.Verb = "runas";
-            //    System.Diagnostics.Process.Start(startInfo);
-            //    Application.Exit();
-            //    return;
-            //}
+                    // Restart program and run as admin
+                    ProcessStartInfo startInfo = new ProcessStartInfo(myPath);
+                    startInfo.Verb = "runas";
+                    System.Diagnostics.Process.Start(startInfo);
+                    Application.Exit();
+                    return;
+                }
+                else
+                {
+                    lbLog.Items.Add("Not Running as Admin, expect problems!");
+                }
+            }
         }
 
         private void splitContainer2_Panel1_Paint(object sender, PaintEventArgs e)
         {
 
         }
+
+        private async void btnContentToApp_Click(object sender, EventArgs e)
+        {
+            if (dgPreviousDownloads.Rows.Count > 0)
+            {
+                // Get SiteCode and SiteServer from local client WMI (requires full Admin)
+                siteDetails = await GetSCCMSiteDetails();
+
+
+            }
+
+        }
+
+        private async Task<SCCMSiteDetails> GetSCCMSiteDetails()
+        {
+            return await Task.Run(() =>
+            {
+                string siteServer = "";
+                string siteCode = "";
+
+                ManagementScope scope = new ManagementScope("\\\\localhost\\root\\ccm", connOptions);
+                scope.Connect();
+                ObjectQuery query = new ObjectQuery("select * from SMS_LookupMP");
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
+                ManagementObjectCollection coll = searcher.Get();
+                foreach (ManagementObject obj in coll)
+                {
+                    siteServer = (string)obj["Name"];
+                }
+
+                ManagementBaseObject inParams = null;
+                ManagementPath mgmtPath = new ManagementPath("SMS_Client");
+                ManagementClass classObj = new ManagementClass(scope, mgmtPath, null);
+                ManagementBaseObject outParams = classObj.InvokeMethod("GetAssignedSite", inParams, null);
+                siteCode = System.Convert.ToString(outParams.Properties["sSiteCode"].Value);
+
+                return new SCCMSiteDetails(siteServer, siteCode);
+            });
+        }
+
     }
 }

@@ -28,29 +28,29 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Security.SecureString secureString1 = new System.Security.SecureString();
+            System.Security.SecureString secureString2 = new System.Security.SecureString();
             this.tbHostname = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.grpPreviousDownloads = new System.Windows.Forms.GroupBox();
-            this.dgPreviousDownloads = new System.Windows.Forms.DataGridView();
-            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.lbLog = new System.Windows.Forms.ListBox();
+            this.btnContentToApp = new System.Windows.Forms.Button();
             this.bgwWMI = new System.ComponentModel.BackgroundWorker();
             this.tbUsername = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.tbPassword = new SecurePasswordTextBox.SecureTextBox();
+            this.lbLog = new System.Windows.Forms.ListBox();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tbPrevDownloads = new System.Windows.Forms.TabPage();
+            this.tbReboot = new System.Windows.Forms.TabPage();
+            this.dgPreviousDownloads = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.grpPreviousDownloads.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tbPrevDownloads.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgPreviousDownloads)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
-            this.splitContainer2.Panel2.SuspendLayout();
-            this.splitContainer2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tbHostname
@@ -71,11 +71,12 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(478, 30);
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button1.Location = new System.Drawing.Point(6, 417);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(123, 23);
+            this.button1.Size = new System.Drawing.Size(172, 23);
             this.button1.TabIndex = 2;
-            this.button1.Text = "Connect";
+            this.button1.Text = "Get Previous CTM Downloads";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -84,69 +85,32 @@
             this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer1.Location = new System.Drawing.Point(15, 59);
+            this.splitContainer1.Location = new System.Drawing.Point(15, 58);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.grpPreviousDownloads);
+            this.splitContainer1.Panel1.Controls.Add(this.tabControl1);
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(586, 588);
-            this.splitContainer1.SplitterDistance = 293;
+            this.splitContainer1.Panel2.Controls.Add(this.lbLog);
+            this.splitContainer1.Size = new System.Drawing.Size(586, 589);
+            this.splitContainer1.SplitterDistance = 478;
             this.splitContainer1.TabIndex = 3;
             // 
-            // grpPreviousDownloads
+            // btnContentToApp
             // 
-            this.grpPreviousDownloads.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.grpPreviousDownloads.Controls.Add(this.dgPreviousDownloads);
-            this.grpPreviousDownloads.Location = new System.Drawing.Point(3, 3);
-            this.grpPreviousDownloads.Name = "grpPreviousDownloads";
-            this.grpPreviousDownloads.Size = new System.Drawing.Size(580, 287);
-            this.grpPreviousDownloads.TabIndex = 0;
-            this.grpPreviousDownloads.TabStop = false;
-            this.grpPreviousDownloads.Text = "Previous Downloads";
-            // 
-            // dgPreviousDownloads
-            // 
-            this.dgPreviousDownloads.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgPreviousDownloads.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgPreviousDownloads.Location = new System.Drawing.Point(3, 16);
-            this.dgPreviousDownloads.Name = "dgPreviousDownloads";
-            this.dgPreviousDownloads.Size = new System.Drawing.Size(574, 268);
-            this.dgPreviousDownloads.TabIndex = 0;
-            // 
-            // splitContainer2
-            // 
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer2.Name = "splitContainer2";
-            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer2.Panel1
-            // 
-            this.splitContainer2.Panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer2_Panel1_Paint);
-            // 
-            // splitContainer2.Panel2
-            // 
-            this.splitContainer2.Panel2.Controls.Add(this.lbLog);
-            this.splitContainer2.Size = new System.Drawing.Size(586, 291);
-            this.splitContainer2.SplitterDistance = 186;
-            this.splitContainer2.TabIndex = 0;
-            // 
-            // lbLog
-            // 
-            this.lbLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbLog.FormattingEnabled = true;
-            this.lbLog.Location = new System.Drawing.Point(0, 0);
-            this.lbLog.Name = "lbLog";
-            this.lbLog.Size = new System.Drawing.Size(586, 101);
-            this.lbLog.TabIndex = 0;
+            this.btnContentToApp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnContentToApp.Enabled = false;
+            this.btnContentToApp.Location = new System.Drawing.Point(184, 417);
+            this.btnContentToApp.Name = "btnContentToApp";
+            this.btnContentToApp.Size = new System.Drawing.Size(132, 23);
+            this.btnContentToApp.TabIndex = 1;
+            this.btnContentToApp.Text = "Find Application Names";
+            this.btnContentToApp.UseVisualStyleBackColor = true;
+            this.btnContentToApp.Click += new System.EventHandler(this.btnContentToApp_Click);
             // 
             // tbUsername
             // 
@@ -178,9 +142,67 @@
             this.tbPassword.Location = new System.Drawing.Point(308, 32);
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.PasswordChar = '*';
-            this.tbPassword.SecureText = secureString1;
+            this.tbPassword.SecureText = secureString2;
             this.tbPassword.Size = new System.Drawing.Size(161, 20);
             this.tbPassword.TabIndex = 8;
+            // 
+            // lbLog
+            // 
+            this.lbLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbLog.FormattingEnabled = true;
+            this.lbLog.Location = new System.Drawing.Point(3, 3);
+            this.lbLog.Name = "lbLog";
+            this.lbLog.Size = new System.Drawing.Size(580, 95);
+            this.lbLog.TabIndex = 0;
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl1.Controls.Add(this.tbPrevDownloads);
+            this.tabControl1.Controls.Add(this.tbReboot);
+            this.tabControl1.Location = new System.Drawing.Point(3, 3);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(580, 472);
+            this.tabControl1.TabIndex = 9;
+            // 
+            // tbPrevDownloads
+            // 
+            this.tbPrevDownloads.Controls.Add(this.dgPreviousDownloads);
+            this.tbPrevDownloads.Controls.Add(this.btnContentToApp);
+            this.tbPrevDownloads.Controls.Add(this.button1);
+            this.tbPrevDownloads.Location = new System.Drawing.Point(4, 22);
+            this.tbPrevDownloads.Name = "tbPrevDownloads";
+            this.tbPrevDownloads.Padding = new System.Windows.Forms.Padding(3);
+            this.tbPrevDownloads.Size = new System.Drawing.Size(572, 446);
+            this.tbPrevDownloads.TabIndex = 0;
+            this.tbPrevDownloads.Text = "Previous Downloads";
+            this.tbPrevDownloads.UseVisualStyleBackColor = true;
+            // 
+            // tbReboot
+            // 
+            this.tbReboot.Location = new System.Drawing.Point(4, 22);
+            this.tbReboot.Name = "tbReboot";
+            this.tbReboot.Padding = new System.Windows.Forms.Padding(3);
+            this.tbReboot.Size = new System.Drawing.Size(572, 446);
+            this.tbReboot.TabIndex = 1;
+            this.tbReboot.Text = "Reboot?";
+            this.tbReboot.UseVisualStyleBackColor = true;
+            // 
+            // dgPreviousDownloads
+            // 
+            this.dgPreviousDownloads.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgPreviousDownloads.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgPreviousDownloads.Location = new System.Drawing.Point(9, 6);
+            this.dgPreviousDownloads.Name = "dgPreviousDownloads";
+            this.dgPreviousDownloads.Size = new System.Drawing.Size(554, 408);
+            this.dgPreviousDownloads.TabIndex = 3;
             // 
             // Form1
             // 
@@ -192,7 +214,6 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.tbUsername);
             this.Controls.Add(this.splitContainer1);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbHostname);
             this.Name = "Form1";
@@ -202,11 +223,9 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.grpPreviousDownloads.ResumeLayout(false);
+            this.tabControl1.ResumeLayout(false);
+            this.tbPrevDownloads.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgPreviousDownloads)).EndInit();
-            this.splitContainer2.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
-            this.splitContainer2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -218,15 +237,17 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.GroupBox grpPreviousDownloads;
-        private System.Windows.Forms.DataGridView dgPreviousDownloads;
-        private System.Windows.Forms.SplitContainer splitContainer2;
-        private System.Windows.Forms.ListBox lbLog;
         private System.ComponentModel.BackgroundWorker bgwWMI;
         private System.Windows.Forms.TextBox tbUsername;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private SecurePasswordTextBox.SecureTextBox tbPassword;
+        private System.Windows.Forms.Button btnContentToApp;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tbPrevDownloads;
+        private System.Windows.Forms.DataGridView dgPreviousDownloads;
+        private System.Windows.Forms.TabPage tbReboot;
+        private System.Windows.Forms.ListBox lbLog;
     }
 }
 
