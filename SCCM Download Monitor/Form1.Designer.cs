@@ -28,22 +28,29 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Security.SecureString secureString2 = new System.Security.SecureString();
+            System.Security.SecureString secureString1 = new System.Security.SecureString();
             this.tbHostname = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tbPrevDownloads = new System.Windows.Forms.TabPage();
+            this.dgPreviousDownloads = new System.Windows.Forms.DataGridView();
             this.btnContentToApp = new System.Windows.Forms.Button();
+            this.tbReboot = new System.Windows.Forms.TabPage();
+            this.btnReboot = new System.Windows.Forms.Button();
+            this.lbLog = new System.Windows.Forms.ListBox();
             this.bgwWMI = new System.ComponentModel.BackgroundWorker();
             this.tbUsername = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.tbPassword = new SecurePasswordTextBox.SecureTextBox();
-            this.lbLog = new System.Windows.Forms.ListBox();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tbPrevDownloads = new System.Windows.Forms.TabPage();
-            this.tbReboot = new System.Windows.Forms.TabPage();
-            this.dgPreviousDownloads = new System.Windows.Forms.DataGridView();
+            this.chkCBServicing = new System.Windows.Forms.CheckBox();
+            this.chkWU = new System.Windows.Forms.CheckBox();
+            this.chkCCM = new System.Windows.Forms.CheckBox();
+            this.chkCompRen = new System.Windows.Forms.CheckBox();
+            this.chkFileRen = new System.Windows.Forms.CheckBox();
+            this.lbFileRenames = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -51,6 +58,7 @@
             this.tabControl1.SuspendLayout();
             this.tbPrevDownloads.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgPreviousDownloads)).BeginInit();
+            this.tbReboot.SuspendLayout();
             this.SuspendLayout();
             // 
             // tbHostname
@@ -100,6 +108,43 @@
             this.splitContainer1.SplitterDistance = 478;
             this.splitContainer1.TabIndex = 3;
             // 
+            // tabControl1
+            // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl1.Controls.Add(this.tbPrevDownloads);
+            this.tabControl1.Controls.Add(this.tbReboot);
+            this.tabControl1.Location = new System.Drawing.Point(3, 3);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(580, 472);
+            this.tabControl1.TabIndex = 9;
+            // 
+            // tbPrevDownloads
+            // 
+            this.tbPrevDownloads.Controls.Add(this.dgPreviousDownloads);
+            this.tbPrevDownloads.Controls.Add(this.btnContentToApp);
+            this.tbPrevDownloads.Controls.Add(this.button1);
+            this.tbPrevDownloads.Location = new System.Drawing.Point(4, 22);
+            this.tbPrevDownloads.Name = "tbPrevDownloads";
+            this.tbPrevDownloads.Padding = new System.Windows.Forms.Padding(3);
+            this.tbPrevDownloads.Size = new System.Drawing.Size(572, 446);
+            this.tbPrevDownloads.TabIndex = 0;
+            this.tbPrevDownloads.Text = "Previous Downloads";
+            this.tbPrevDownloads.UseVisualStyleBackColor = true;
+            // 
+            // dgPreviousDownloads
+            // 
+            this.dgPreviousDownloads.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgPreviousDownloads.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgPreviousDownloads.Location = new System.Drawing.Point(9, 6);
+            this.dgPreviousDownloads.Name = "dgPreviousDownloads";
+            this.dgPreviousDownloads.Size = new System.Drawing.Size(554, 408);
+            this.dgPreviousDownloads.TabIndex = 3;
+            // 
             // btnContentToApp
             // 
             this.btnContentToApp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -111,6 +156,44 @@
             this.btnContentToApp.Text = "Find Application Names";
             this.btnContentToApp.UseVisualStyleBackColor = true;
             this.btnContentToApp.Click += new System.EventHandler(this.btnContentToApp_Click);
+            // 
+            // tbReboot
+            // 
+            this.tbReboot.Controls.Add(this.lbFileRenames);
+            this.tbReboot.Controls.Add(this.chkFileRen);
+            this.tbReboot.Controls.Add(this.chkCompRen);
+            this.tbReboot.Controls.Add(this.chkCCM);
+            this.tbReboot.Controls.Add(this.chkWU);
+            this.tbReboot.Controls.Add(this.chkCBServicing);
+            this.tbReboot.Controls.Add(this.btnReboot);
+            this.tbReboot.Location = new System.Drawing.Point(4, 22);
+            this.tbReboot.Name = "tbReboot";
+            this.tbReboot.Padding = new System.Windows.Forms.Padding(3);
+            this.tbReboot.Size = new System.Drawing.Size(572, 446);
+            this.tbReboot.TabIndex = 1;
+            this.tbReboot.Text = "Reboot?";
+            this.tbReboot.UseVisualStyleBackColor = true;
+            // 
+            // btnReboot
+            // 
+            this.btnReboot.Location = new System.Drawing.Point(6, 6);
+            this.btnReboot.Name = "btnReboot";
+            this.btnReboot.Size = new System.Drawing.Size(168, 23);
+            this.btnReboot.TabIndex = 0;
+            this.btnReboot.Text = "Check for Pending Reboot";
+            this.btnReboot.UseVisualStyleBackColor = true;
+            this.btnReboot.Click += new System.EventHandler(this.btnReboot_Click);
+            // 
+            // lbLog
+            // 
+            this.lbLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbLog.FormattingEnabled = true;
+            this.lbLog.Location = new System.Drawing.Point(3, 3);
+            this.lbLog.Name = "lbLog";
+            this.lbLog.Size = new System.Drawing.Size(580, 95);
+            this.lbLog.TabIndex = 0;
             // 
             // tbUsername
             // 
@@ -142,67 +225,75 @@
             this.tbPassword.Location = new System.Drawing.Point(308, 32);
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.PasswordChar = '*';
-            this.tbPassword.SecureText = secureString2;
+            this.tbPassword.SecureText = secureString1;
             this.tbPassword.Size = new System.Drawing.Size(161, 20);
             this.tbPassword.TabIndex = 8;
             // 
-            // lbLog
+            // chkCBServicing
             // 
-            this.lbLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.chkCBServicing.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkCBServicing.Enabled = false;
+            this.chkCBServicing.Location = new System.Drawing.Point(7, 35);
+            this.chkCBServicing.Name = "chkCBServicing";
+            this.chkCBServicing.Size = new System.Drawing.Size(104, 24);
+            this.chkCBServicing.TabIndex = 1;
+            this.chkCBServicing.Text = "CBServicing";
+            this.chkCBServicing.UseVisualStyleBackColor = true;
+            // 
+            // chkWU
+            // 
+            this.chkWU.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkWU.Enabled = false;
+            this.chkWU.Location = new System.Drawing.Point(6, 65);
+            this.chkWU.Name = "chkWU";
+            this.chkWU.Size = new System.Drawing.Size(105, 22);
+            this.chkWU.TabIndex = 2;
+            this.chkWU.Text = "WindowsUpdate";
+            this.chkWU.UseVisualStyleBackColor = true;
+            // 
+            // chkCCM
+            // 
+            this.chkCCM.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkCCM.Enabled = false;
+            this.chkCCM.Location = new System.Drawing.Point(6, 93);
+            this.chkCCM.Name = "chkCCM";
+            this.chkCCM.Size = new System.Drawing.Size(105, 22);
+            this.chkCCM.TabIndex = 3;
+            this.chkCCM.Text = "CCMClientSDK";
+            this.chkCCM.UseVisualStyleBackColor = true;
+            // 
+            // chkCompRen
+            // 
+            this.chkCompRen.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkCompRen.Enabled = false;
+            this.chkCompRen.Location = new System.Drawing.Point(117, 35);
+            this.chkCompRen.Name = "chkCompRen";
+            this.chkCompRen.Size = new System.Drawing.Size(105, 22);
+            this.chkCompRen.TabIndex = 4;
+            this.chkCompRen.Text = "CompRename";
+            this.chkCompRen.UseVisualStyleBackColor = true;
+            // 
+            // chkFileRen
+            // 
+            this.chkFileRen.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkFileRen.Enabled = false;
+            this.chkFileRen.Location = new System.Drawing.Point(117, 63);
+            this.chkFileRen.Name = "chkFileRen";
+            this.chkFileRen.Size = new System.Drawing.Size(105, 22);
+            this.chkFileRen.TabIndex = 5;
+            this.chkFileRen.Text = "File Renames";
+            this.chkFileRen.UseVisualStyleBackColor = true;
+            // 
+            // lbFileRenames
+            // 
+            this.lbFileRenames.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbLog.FormattingEnabled = true;
-            this.lbLog.Location = new System.Drawing.Point(3, 3);
-            this.lbLog.Name = "lbLog";
-            this.lbLog.Size = new System.Drawing.Size(580, 95);
-            this.lbLog.TabIndex = 0;
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Controls.Add(this.tbPrevDownloads);
-            this.tabControl1.Controls.Add(this.tbReboot);
-            this.tabControl1.Location = new System.Drawing.Point(3, 3);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(580, 472);
-            this.tabControl1.TabIndex = 9;
-            // 
-            // tbPrevDownloads
-            // 
-            this.tbPrevDownloads.Controls.Add(this.dgPreviousDownloads);
-            this.tbPrevDownloads.Controls.Add(this.btnContentToApp);
-            this.tbPrevDownloads.Controls.Add(this.button1);
-            this.tbPrevDownloads.Location = new System.Drawing.Point(4, 22);
-            this.tbPrevDownloads.Name = "tbPrevDownloads";
-            this.tbPrevDownloads.Padding = new System.Windows.Forms.Padding(3);
-            this.tbPrevDownloads.Size = new System.Drawing.Size(572, 446);
-            this.tbPrevDownloads.TabIndex = 0;
-            this.tbPrevDownloads.Text = "Previous Downloads";
-            this.tbPrevDownloads.UseVisualStyleBackColor = true;
-            // 
-            // tbReboot
-            // 
-            this.tbReboot.Location = new System.Drawing.Point(4, 22);
-            this.tbReboot.Name = "tbReboot";
-            this.tbReboot.Padding = new System.Windows.Forms.Padding(3);
-            this.tbReboot.Size = new System.Drawing.Size(572, 446);
-            this.tbReboot.TabIndex = 1;
-            this.tbReboot.Text = "Reboot?";
-            this.tbReboot.UseVisualStyleBackColor = true;
-            // 
-            // dgPreviousDownloads
-            // 
-            this.dgPreviousDownloads.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgPreviousDownloads.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgPreviousDownloads.Location = new System.Drawing.Point(9, 6);
-            this.dgPreviousDownloads.Name = "dgPreviousDownloads";
-            this.dgPreviousDownloads.Size = new System.Drawing.Size(554, 408);
-            this.dgPreviousDownloads.TabIndex = 3;
+            this.lbFileRenames.FormattingEnabled = true;
+            this.lbFileRenames.Location = new System.Drawing.Point(7, 121);
+            this.lbFileRenames.Name = "lbFileRenames";
+            this.lbFileRenames.Size = new System.Drawing.Size(559, 316);
+            this.lbFileRenames.TabIndex = 6;
             // 
             // Form1
             // 
@@ -226,6 +317,7 @@
             this.tabControl1.ResumeLayout(false);
             this.tbPrevDownloads.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgPreviousDownloads)).EndInit();
+            this.tbReboot.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -248,6 +340,13 @@
         private System.Windows.Forms.DataGridView dgPreviousDownloads;
         private System.Windows.Forms.TabPage tbReboot;
         private System.Windows.Forms.ListBox lbLog;
+        private System.Windows.Forms.Button btnReboot;
+        private System.Windows.Forms.CheckBox chkCBServicing;
+        private System.Windows.Forms.CheckBox chkFileRen;
+        private System.Windows.Forms.CheckBox chkCompRen;
+        private System.Windows.Forms.CheckBox chkCCM;
+        private System.Windows.Forms.CheckBox chkWU;
+        private System.Windows.Forms.ListBox lbFileRenames;
     }
 }
 
